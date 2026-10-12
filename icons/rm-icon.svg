@@ -1,0 +1,15 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Símbolo Radical (Raíz cuadrada) en Cian Neón -->
+  <path d="M 6 36 L 14 36 L 23 56 L 31 10 L 58 10" 
+        stroke="#00F0FF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Letra R estilizada integrada en Azul Eléctrico -->
+  <path d="M 33 22 L 33 52 M 33 22 L 44 22 C 49 22 53 25 53 30 C 53 35 49 38 44 38 L 33 38 M 43 38 L 53 52" 
+        stroke="#00C8FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Puntos de Matriz dentro de la R -->
+  <circle cx="39" cy="27" r="1.5" fill="#00F0FF"/>
+  <circle cx="45" cy="27" r="1.5" fill="#00F0FF"/>
+  <circle cx="39" cy="33" r="1.5" fill="#00F0FF"/>
+  <circle cx="45" cy="33" r="1.5" fill="#00F0FF"/>
+</svg>
