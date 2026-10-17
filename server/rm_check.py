@@ -3,11 +3,14 @@ import os
 import json
 
 
-interprete_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "Radix Matix", "src")
-)
-if interprete_path not in sys.path:
-    sys.path.insert(0, interprete_path)
+posibles_rutas = [
+    r"c:\Proyectos\Radix Matix\Radix Matix\src",
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "Radix Matix", "src")),
+]
+
+for ruta in posibles_rutas:
+    if os.path.exists(ruta) and ruta not in sys.path:
+        sys.path.insert(0, ruta)
 
 
 def analizar(codigo: str) -> list:
