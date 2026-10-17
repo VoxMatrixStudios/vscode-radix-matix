@@ -1,0 +1,114 @@
+{
+  "Cabecera Español": {
+    "prefix": "es",
+    "body": [
+      "#! es",
+      "$0"
+    ],
+    "description": "Establece el idioma a español"
+  },
+  "Cabecera Inglés": {
+    "prefix": "en",
+    "body": [
+      "#! en",
+      "$0"
+    ],
+    "description": "Set language to English"
+  },
+  "Imprimir": {
+    "prefix": "imp",
+    "body": [
+      "imprimir(${1:mensaje})"
+    ],
+    "description": "Imprime un valor o texto en pantalla"
+  },
+  "Print": {
+    "prefix": "pr",
+    "body": [
+      "print(${1:message})"
+    ],
+    "description": "Print a value or message to the screen"
+  },
+  "Condicional Si": {
+    "prefix": "si",
+    "body": [
+      "si ${1:condicion}:",
+      "    ${0:hacer_algo}"
+    ],
+    "description": "Estructura condicional si"
+  },
+  "Condicional If": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}:",
+      "    ${0:do_something}"
+    ],
+    "description": "If conditional statement"
+  },
+  "Si-Sino": {
+    "prefix": "sisi",
+    "body": [
+      "si ${1:condicion}:",
+      "    ${2:hacer_algo}",
+      "sino:",
+      "    ${0:otro_caso}"
+    ],
+    "description": "Condicional si - sino"
+  },
+  "If-Else": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition}:",
+      "    ${2:do_something}",
+      "else:",
+      "    ${0:otherwise}"
+    ],
+    "description": "If - else conditional statement"
+  },
+  "Bucle Mientras": {
+    "prefix": "mientras",
+    "body": [
+      "mientras ${1:condicion}:",
+      "    ${0:hacer_algo}"
+    ],
+    "description": "Bucle mientras la condición sea verdadera"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition}:",
+      "    ${0:do_something}"
+    ],
+    "description": "While loop"
+  },
+  "Función": {
+    "prefix": "fun",
+    "body": [
+      "funcion ${1:nombre}(${2:argumentos}):",
+      "    ${0:hacer_algo}"
+    ],
+    "description": "Declarar una función en español"
+  },
+  "Function": {
+    "prefix": "def",
+    "body": [
+      "function ${1:name}(${2:arguments}):",
+      "    ${0:do_something}"
+    ],
+    "description": "Define a function in English"
+  },
+  "Despejar Ecuación": {
+    "prefix": "despejar",
+    "body": [
+      "despejar(\"${1:ecuacion}\", \"${2:variable}\")"
+    ],
+    "description": "Despeja analíticamente una variable en una ecuación lineal"
+  },
+  "Solve Equation": {
+    "prefix": "solve",
+    "body": [
+      "solve(\"${1:equation}\", \"${2:variable}\")"
+    ],
+    "description": "Analytically solve for a variable in a linear equation"
+  }
+}

@@ -6,8 +6,12 @@
   "publisher": "VoxMatrixStudios",
   "icon": "icons/logo-presentacion.png",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.74.0"
   },
+
+  "main": "./extension.js",
+  "activationEvents": ["onLanguage:radixmatix"],
+
   "categories": [
     "Programming Languages"
   ],
@@ -23,6 +27,7 @@
           "dark": "./icons/rm-icon.svg"
         }
       }
+      
     ],
     "grammars": [
       {
@@ -30,6 +35,19 @@
         "scopeName": "source.rm",
         "path": "./syntaxes/radixmatix.tmLanguage.json"
       }
+      
+    ],
+    "snippets": [
+      {
+        "language": "radixmatix",
+        "path": "./snippets/radixmatix.json"
+      }
     ]
+
+  },
+
+  "dependencies": {
+    "@types/vscode": "1.74.0"
   }
+  
 }
