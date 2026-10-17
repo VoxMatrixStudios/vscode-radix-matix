@@ -63,7 +63,7 @@ def analizar(codigo: str) -> list:
         return diagnosticos
 
     # 2. Avisos detectados por el lexer (ej. palabras en otro idioma)
-    if hasattr(lexer, "avisos"):
+    if hasattr(lexer, "avisos") and isinstance(lexer.avisos, list):
         for aviso in lexer.avisos:
             diagnosticos.append(
                 {
@@ -76,15 +76,18 @@ def analizar(codigo: str) -> list:
             )
 
     # 3. Análisis Sintáctico (Parser)
+    parser = None
     try:
-        parser = Parser(tokens, idioma=lexer.language)
+        parser = Parser(tokens)
         parser.parse()
     except Exception as err:
         linea = 1
         columna = 1
-        if hasattr(parser, "current_token") and parser.current_token:
-            linea = getattr(parser.current_token, "line", 1)
-            columna = getattr(parser.current_token, "column", 1)
+        if parser is not None:
+            tok = parser.current_token() if callable(parser.current_token) else parser.current_token
+            if tok:
+                linea = getattr(tok, "line", 1)
+                columna = getattr(tok, "column", 1)
         diagnosticos.append(
             {
                 "linea": linea,
