@@ -59,6 +59,44 @@ function validarDocumento(documento, coleccionDiagnosticos, rutaScript) {
 
 let temporizadorDiagnostico = null;
 
+const ELEMENTOS_INTELLISENSE = [
+    // Funciones matemáticas y del sistema
+    { label: 'imprimir', kind: vscode.CompletionItemKind.Function, detail: 'imprimir(mensaje)', doc: 'Imprime un valor o texto en pantalla.' },
+    { label: 'print', kind: vscode.CompletionItemKind.Function, detail: 'print(message)', doc: 'Prints a value or message to the screen.' },
+    { label: 'leer', kind: vscode.CompletionItemKind.Function, detail: 'leer(mensaje)', doc: 'Lee una entrada del usuario desde la terminal.' },
+    { label: 'input', kind: vscode.CompletionItemKind.Function, detail: 'input(prompt)', doc: 'Reads user input from the terminal.' },
+    { label: 'despejar', kind: vscode.CompletionItemKind.Function, detail: 'despejar(ecuacion, variable)', doc: 'Despeja analíticamente una incógnita en una ecuación lineal.' },
+    { label: 'solve', kind: vscode.CompletionItemKind.Function, detail: 'solve(equation, variable)', doc: 'Analytically solves for an unknown in a linear equation.' },
+    { label: 'raiz', kind: vscode.CompletionItemKind.Function, detail: 'raiz(numero, [indice])', doc: 'Calcula la raíz de un número (por defecto cuadrada).' },
+    { label: 'root', kind: vscode.CompletionItemKind.Function, detail: 'root(number, [index])', doc: 'Calculates the root of a number (square root by default).' },
+    { label: 'potencia', kind: vscode.CompletionItemKind.Function, detail: 'potencia(base, exponente)', doc: 'Eleva la base al exponente dado.' },
+    { label: 'power', kind: vscode.CompletionItemKind.Function, detail: 'power(base, exponent)', doc: 'Raises base to the specified exponent.' },
+    { label: 'factorial', kind: vscode.CompletionItemKind.Function, detail: 'factorial(n)', doc: 'Calcula el factorial de un número entero positivo.' },
+    { label: 'absoluto', kind: vscode.CompletionItemKind.Function, detail: 'absoluto(x)', doc: 'Devuelve el valor absoluto o módulo de un número.' },
+    { label: 'abs', kind: vscode.CompletionItemKind.Function, detail: 'abs(x)', doc: 'Returns the absolute value or magnitude of a number.' },
+    { label: 'fraccion', kind: vscode.CompletionItemKind.Function, detail: 'fraccion(numerador, denominador)', doc: 'Crea una fracción matemática exacta.' },
+    { label: 'fraction', kind: vscode.CompletionItemKind.Function, detail: 'fraction(numerator, denominator)', doc: 'Creates an exact mathematical fraction.' },
+    { label: 'aleatorio', kind: vscode.CompletionItemKind.Function, detail: 'aleatorio(min, max)', doc: 'Genera un número entero aleatorio dentro del rango.' },
+    { label: 'random', kind: vscode.CompletionItemKind.Function, detail: 'random(min, max)', doc: 'Generates a random integer within the given range.' },
+    
+    // Palabras clave de control
+    { label: 'si', kind: vscode.CompletionItemKind.Keyword, detail: 'si condicion:', doc: 'Estructura condicional si.' },
+    { label: 'sino', kind: vscode.CompletionItemKind.Keyword, detail: 'sino:', doc: 'Rama alternativa de un condicional.' },
+    { label: 'mientras', kind: vscode.CompletionItemKind.Keyword, detail: 'mientras condicion:', doc: 'Bucle que se repite mientras la condición sea verdadera.' },
+    { label: 'para', kind: vscode.CompletionItemKind.Keyword, detail: 'para elemento en coleccion:', doc: 'Bucle que recorre una secuencia o rango.' },
+    { label: 'funcion', kind: vscode.CompletionItemKind.Keyword, detail: 'funcion nombre(params):', doc: 'Declara una función en español.' },
+    { label: 'devolver', kind: vscode.CompletionItemKind.Keyword, detail: 'devolver valor', doc: 'Retorna un valor desde una función.' },
+    { label: 'romper', kind: vscode.CompletionItemKind.Keyword, detail: 'romper', doc: 'Termina el bucle actual inmediatamente.' },
+    { label: 'continuar', kind: vscode.CompletionItemKind.Keyword, detail: 'continuar', doc: 'Salta a la siguiente iteración del bucle.' },
+    { label: 'detener', kind: vscode.CompletionItemKind.Keyword, detail: 'detener', doc: 'Detiene un temporizador activo.' },
+    
+    // Constantes
+    { label: 'verdad', kind: vscode.CompletionItemKind.Constant, detail: 'verdad', doc: 'Valor booleano verdadero.' },
+    { label: 'falso', kind: vscode.CompletionItemKind.Constant, detail: 'falso', doc: 'Valor booleano falso.' },
+    { label: 'nada', kind: vscode.CompletionItemKind.Constant, detail: 'nada', doc: 'Valor nulo o vacío.' },
+    { label: 'pi', kind: vscode.CompletionItemKind.Constant, detail: 'pi = 3.14159...', doc: 'Constante matemática Pi.' },
+    { label: 'e', kind: vscode.CompletionItemKind.Constant, detail: 'e = 2.71828...', doc: 'Constante matemática de Euler.' }
+];
 function activate(context) {
     console.log('Extensión Radix Matix activada.');
 
@@ -95,6 +133,21 @@ function activate(context) {
             coleccionDiagnosticos.delete(doc.uri);
         })
     );
+        // 5. Proveedor de IntelliSense / Autocompletado
+    const proveedorAutocompletado = vscode.languages.registerCompletionItemProvider(
+        'radixmatix',
+        {
+            provideCompletionItems(documento, posicion) {
+                return ELEMENTOS_INTELLISENSE.map(item => {
+                    const completion = new vscode.CompletionItem(item.label, item.kind);
+                    completion.detail = item.detail;
+                    completion.documentation = new vscode.MarkdownString(item.doc);
+                    return completion;
+                });
+            }
+        }
+    );
+    context.subscriptions.push(proveedorAutocompletado);
 }
 
 function deactivate() {
