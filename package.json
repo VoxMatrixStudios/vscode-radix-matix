@@ -2,7 +2,7 @@
   "name": "radix-matix",
   "displayName": "Radix Matix",
   "description": "Soporte de sintaxis oficial para el lenguaje Radix Matix (.rm)",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "publisher": "VoxMatrixStudios",
   "icon": "icons/logo-presentacion.png",
   "engines": {
@@ -13,8 +13,9 @@
     "url": "https://github.com/VoxMatrixStudios/vscode-radix-matix.git"
   },
   "main": "./extension.js",
-  "activationEvents": ["onLanguage:radixmatix"],
-
+  "activationEvents": [
+    "onLanguage:radixmatix"
+  ],
   "categories": [
     "Programming Languages"
   ],
@@ -22,15 +23,20 @@
     "languages": [
       {
         "id": "radixmatix",
-        "aliases": ["Radix Matix", "radixmatix", "rm"],
-        "extensions": [".rm"],
+        "aliases": [
+          "Radix Matix",
+          "radixmatix",
+          "rm"
+        ],
+        "extensions": [
+          ".rm"
+        ],
         "configuration": "./language-configuration.json",
         "icon": {
           "light": "./icons/rm-icon.svg",
           "dark": "./icons/rm-icon.svg"
         }
       }
-      
     ],
     "grammars": [
       {
@@ -38,7 +44,6 @@
         "scopeName": "source.rm",
         "path": "./syntaxes/radixmatix.tmLanguage.json"
       }
-      
     ],
     "snippets": [
       {
@@ -46,11 +51,8 @@
         "path": "./snippets/radixmatix.json"
       }
     ]
-
   },
-
   "dependencies": {
     "@types/vscode": "1.74.0"
   }
-  
 }

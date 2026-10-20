@@ -24,7 +24,7 @@
     },
     {
       "name": "constant.numeric.rm",
-      "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+      "match": "\\b[0-9]+(\\.[0-9]+)?(ms|s)?\\b"
     },
     {
       "name": "constant.language.boolean.rm",
@@ -40,7 +40,7 @@
     },
     {
       "name": "keyword.control.rm",
-      "match": "\\b(si|sino\\s+si|sino|mientras|funcion|devolver|if|else\\s+if|else|while|func|return)\\b"
+      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|function|return)\\b"
     },
     {
       "name": "keyword.operator.logical.rm",
@@ -48,7 +48,7 @@
     },
     {
       "name": "support.function.builtin.rm",
-      "match": "\\b(imprimir|print|leer|input|entero|int|decimal|float|texto|str|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve)\\b"
+      "match": "\\b(imprimir|print|leer|input|ingresar|enter|entero|int|decimal|float|texto|str|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve|promedio|mean|mediana|median|moda|mode|frecuencia|frequency|suma|sum|minimo|min|maximo|max|agregar|append|longitud|length|len|quitar|remove|contiene|contains|copiar|copy|ordenar|sort|rango|range)\\b"
     },
     {
       "name": "keyword.operator.arithmetic.rm",

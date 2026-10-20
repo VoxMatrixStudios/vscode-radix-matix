@@ -110,5 +110,53 @@
       "solve(\"${1:equation}\", \"${2:variable}\")"
     ],
     "description": "Analytically solve for a variable in a linear equation"
+  },
+  "Bucle Para": {
+    "prefix": "para",
+    "body": [
+      "para  en :",
+      "    "
+    ],
+    "description": "Bucle para recorrer una lista o rango"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for  in :",
+      "    "
+    ],
+    "description": "For loop over a list or range"
+  },
+  "Temporizador Cada": {
+    "prefix": "cada",
+    "body": [
+      "cada :",
+      "    "
+    ],
+    "description": "Temporizador repetitivo nativo"
+  },
+  "Timer Every": {
+    "prefix": "every",
+    "body": [
+      "every :",
+      "    "
+    ],
+    "description": "Native repetitive timer"
+  },
+  "Temporizador Después": {
+    "prefix": "despues",
+    "body": [
+      "despues de :",
+      "    "
+    ],
+    "description": "Temporizador de ejecución postergada"
+  },
+  "Timer After": {
+    "prefix": "after",
+    "body": [
+      "after :",
+      "    "
+    ],
+    "description": "Delayed single-shot timer"
   }
 }
