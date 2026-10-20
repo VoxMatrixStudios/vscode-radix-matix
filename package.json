@@ -2,7 +2,7 @@
   "name": "radix-matix",
   "displayName": "Radix Matix",
   "description": "Soporte de sintaxis oficial para el lenguaje Radix Matix (.rm)",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "publisher": "VoxMatrixStudios",
   "icon": "icons/logo-presentacion.png",
   "engines": {

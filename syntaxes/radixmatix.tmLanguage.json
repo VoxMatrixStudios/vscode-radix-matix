@@ -5,7 +5,7 @@
   "patterns": [
     {
       "name": "comment.line.shebang.rm",
-      "match": "^#!\\s*(es|en)\\b.*$"
+      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low))\\b.*$"
     },
     {
       "name": "comment.line.double-slash.rm",
@@ -21,6 +21,14 @@
           "match": "\\\\."
         }
       ]
+    },
+    {
+      "name": "constant.numeric.hex.rm",
+      "match": "\\b0[xX][0-9a-fA-F]+\\b"
+    },
+    {
+      "name": "constant.numeric.bin.rm",
+      "match": "\\b0[bB][01]+\\b"
     },
     {
       "name": "constant.numeric.rm",
@@ -40,7 +48,11 @@
     },
     {
       "name": "keyword.control.rm",
-      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|function|return)\\b"
+      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|constante|estructura|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|function|return|const|struct)\\b"
+    },
+    {
+      "name": "storage.type.rm",
+      "match": "\\b(entero|decimal|texto|booleano|byte|int|float|str|bool)\\b"
     },
     {
       "name": "keyword.operator.logical.rm",
@@ -48,7 +60,11 @@
     },
     {
       "name": "support.function.builtin.rm",
-      "match": "\\b(imprimir|print|leer|input|ingresar|enter|entero|int|decimal|float|texto|str|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve|promedio|mean|mediana|median|moda|mode|frecuencia|frequency|suma|sum|minimo|min|maximo|max|agregar|append|longitud|length|len|quitar|remove|contiene|contains|copiar|copy|ordenar|sort|rango|range)\\b"
+      "match": "\\b(imprimir|print|leer|input|ingresar|enter|entero|int|decimal|float|texto|str|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve|promedio|mean|mediana|median|moda|mode|frecuencia|frequency|suma|sum|minimo|min|maximo|max|agregar|append|longitud|length|len|quitar|remove|contiene|contains|copiar|copy|ordenar|sort|rango|range|xor|hexadecimal|hex|binario|bin|binary|reservar|allocate|liberar|free|memoria|memory|guardar_entero|store_int|cargar_entero|load_int|volcar|dump|empujar|push|sacar|pop|puntero_pila|stack_pointer)\\b"
+    },
+    {
+      "name": "keyword.operator.bitwise.rm",
+      "match": "(&|\\||~|<<|>>)"
     },
     {
       "name": "keyword.operator.arithmetic.rm",

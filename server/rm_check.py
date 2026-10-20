@@ -77,9 +77,10 @@ def analizar(codigo: str) -> list:
 
     # 3. Análisis Sintáctico (Parser)
     parser = None
+    ast = None
     try:
         parser = Parser(tokens)
-        parser.parse()
+        ast = parser.parse()
     except Exception as err:
         linea = 1
         columna = 1
@@ -97,6 +98,64 @@ def analizar(codigo: str) -> list:
                 "gravedad": "Error",
             }
         )
+        return diagnosticos
+
+    # 4. Verificación estática de niveles de abstracción
+    try:
+        from niveles import CARACTERISTICAS, exigir_nivel
+        from ast_nodes import (
+            DeclaracionTipada, DeclaracionConstante, DefinicionEstructura,
+            Variable, LlamadaFuncion, OperacionBinaria, OperacionUnaria
+        )
+
+        nivel_doc = getattr(lexer, "nivel", None)
+        if nivel_doc is not None and ast is not None:
+            def verificar_nodo(nodo):
+                if isinstance(nodo, DeclaracionTipada):
+                    caract = nodo.tipo_nombre if nodo.tipo_nombre in CARACTERISTICAS else "constante"
+                    exigir_nivel(nivel_doc, caract, idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, DeclaracionConstante):
+                    exigir_nivel(nivel_doc, "constante", idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, DefinicionEstructura):
+                    exigir_nivel(nivel_doc, "estructura", idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, Variable):
+                    if nodo.nombre in CARACTERISTICAS:
+                        exigir_nivel(nivel_doc, nodo.nombre, idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, LlamadaFuncion):
+                    if nodo.nombre in CARACTERISTICAS:
+                        exigir_nivel(nivel_doc, nodo.nombre, idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, OperacionBinaria):
+                    if nodo.operador in CARACTERISTICAS:
+                        exigir_nivel(nivel_doc, nodo.operador, idioma=getattr(lexer, "language", "es"))
+                elif isinstance(nodo, OperacionUnaria):
+                    if nodo.operador in CARACTERISTICAS:
+                        exigir_nivel(nivel_doc, nodo.operador, idioma=getattr(lexer, "language", "es"))
+
+                for attr, val in getattr(nodo, "__dict__", {}).items():
+                    if isinstance(val, list):
+                        for item in val:
+                            if hasattr(item, "__dict__"):
+                                verificar_nodo(item)
+                    elif hasattr(val, "__dict__"):
+                        verificar_nodo(val)
+
+            verificar_nodo(ast)
+    except ErrorRadix as err:
+        diagnosticos.append(
+            {
+                "linea": getattr(err, "linea", 1),
+                "columna": getattr(err, "columna", 1),
+                "mensaje": (
+                    f"{err.mensaje} (Consejo: {err.consejo})"
+                    if getattr(err, "consejo", None)
+                    else err.mensaje
+                ),
+                "tipo": err.tipo,
+                "gravedad": "Error",
+            }
+        )
+    except Exception:
+        pass
 
     return diagnosticos
 

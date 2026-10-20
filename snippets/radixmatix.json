@@ -154,9 +154,118 @@
   "Timer After": {
     "prefix": "after",
     "body": [
-      "after :",
-      "    "
+      "after ${1:time}:",
+      "    ${0:do_something}"
     ],
     "description": "Delayed single-shot timer"
+  },
+  "Cabecera Módulo Medio": {
+    "prefix": "modmedio",
+    "body": [
+      "#! modulo medio",
+      "$0"
+    ],
+    "description": "Establece el nivel al Módulo Medio (tipos, bits, estructuras)"
+  },
+  "Module Medium Header": {
+    "prefix": "modmedium",
+    "body": [
+      "#! module medium",
+      "$0"
+    ],
+    "description": "Sets the level to Medium Module (types, bits, structs)"
+  },
+  "Cabecera Módulo Bajo": {
+    "prefix": "modbajo",
+    "body": [
+      "#! modulo bajo",
+      "$0"
+    ],
+    "description": "Establece el nivel al Módulo Bajo (memoria simulada, punteros, pila)"
+  },
+  "Module Low Header": {
+    "prefix": "modlow",
+    "body": [
+      "#! module low",
+      "$0"
+    ],
+    "description": "Sets the level to Low Module (simulated memory, heap, stack)"
+  },
+  "Constante": {
+    "prefix": "constante",
+    "body": [
+      "constante ${1:NOMBRE} = ${2:valor}"
+    ],
+    "description": "Declarar una constante inmutable"
+  },
+  "Const": {
+    "prefix": "const",
+    "body": [
+      "const ${1:NAME} = ${2:value}"
+    ],
+    "description": "Declare an immutable constant"
+  },
+  "Estructura": {
+    "prefix": "estructura",
+    "body": [
+      "estructura ${1:Nombre}:",
+      "    ${2:campo}: ${3:tipo}"
+    ],
+    "description": "Definir una estructura de datos tipada"
+  },
+  "Struct": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name}:",
+      "    ${2:field}: ${3:type}"
+    ],
+    "description": "Define a typed data structure"
+  },
+  "Reservar Memoria": {
+    "prefix": "reservar",
+    "body": [
+      "${1:ptr} = reservar(${2:cantidad_bytes})",
+      "${0}",
+      "liberar(${1:ptr})"
+    ],
+    "description": "Reservar y liberar memoria simulada en el montón"
+  },
+  "Allocate Memory": {
+    "prefix": "allocate",
+    "body": [
+      "${1:ptr} = allocate(${2:bytes_count})",
+      "${0}",
+      "free(${1:ptr})"
+    ],
+    "description": "Allocate and free simulated heap memory"
+  },
+  "Guardar Entero": {
+    "prefix": "guardar_entero",
+    "body": [
+      "guardar_entero(${1:direccion}, ${2:valor}, ${3:bytes_1_2_4_8})"
+    ],
+    "description": "Guarda un entero en little-endian en la memoria"
+  },
+  "Cargar Entero": {
+    "prefix": "cargar_entero",
+    "body": [
+      "cargar_entero(${1:direccion}, ${2:bytes_1_2_4_8})"
+    ],
+    "description": "Carga un entero desde la memoria en little-endian"
+  },
+  "Volcar Memoria": {
+    "prefix": "volcar",
+    "body": [
+      "volcar(${1:direccion}, ${2:cantidad})"
+    ],
+    "description": "Imprime un volcado hexadecimal de la memoria"
+  },
+  "Pila Empujar y Sacar": {
+    "prefix": "pila",
+    "body": [
+      "empujar(${1:byte})",
+      "${2:valor} = sacar()"
+    ],
+    "description": "Operaciones LIFO en la pila simulada"
   }
 }

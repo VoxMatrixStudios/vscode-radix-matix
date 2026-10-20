@@ -95,7 +95,39 @@ const ELEMENTOS_INTELLISENSE = [
     { label: 'falso', kind: vscode.CompletionItemKind.Constant, detail: 'falso', doc: 'Valor booleano falso.' },
     { label: 'nada', kind: vscode.CompletionItemKind.Constant, detail: 'nada', doc: 'Valor nulo o vacío.' },
     { label: 'pi', kind: vscode.CompletionItemKind.Constant, detail: 'pi = 3.14159...', doc: 'Constante matemática Pi.' },
-    { label: 'e', kind: vscode.CompletionItemKind.Constant, detail: 'e = 2.71828...', doc: 'Constante matemática de Euler.' }
+    { label: 'e', kind: vscode.CompletionItemKind.Constant, detail: 'e = 2.71828...', doc: 'Constante matemática de Euler.' },
+
+    // Módulo Medio: Tipos, estructuras y bits
+    { label: 'constante', kind: vscode.CompletionItemKind.Keyword, detail: 'constante NOMBRE = valor', doc: 'Declara una constante inmutable (Módulo Medio).' },
+    { label: 'const', kind: vscode.CompletionItemKind.Keyword, detail: 'const NAME = value', doc: 'Declares an immutable constant (Medium Module).' },
+    { label: 'estructura', kind: vscode.CompletionItemKind.Class, detail: 'estructura Nombre:\n    campo: tipo', doc: 'Declara una estructura con campos tipados (Módulo Medio).' },
+    { label: 'struct', kind: vscode.CompletionItemKind.Class, detail: 'struct Name:\n    field: type', doc: 'Declares a structure with typed fields (Medium Module).' },
+    { label: 'byte', kind: vscode.CompletionItemKind.TypeParameter, detail: 'byte (0-255)', doc: 'Tipo de dato entero de un solo byte (Módulo Medio).' },
+    { label: 'xor', kind: vscode.CompletionItemKind.Function, detail: 'xor(a, b)', doc: 'Operación XOR bit a bit entre dos enteros (Módulo Medio).' },
+    { label: 'hexadecimal', kind: vscode.CompletionItemKind.Function, detail: 'hexadecimal(n)', doc: 'Convierte un número a cadena hexadecimal (ej. 0xFF).' },
+    { label: 'hex', kind: vscode.CompletionItemKind.Function, detail: 'hex(n)', doc: 'Converts a number to hexadecimal string (Medium Module).' },
+    { label: 'binario', kind: vscode.CompletionItemKind.Function, detail: 'binario(n)', doc: 'Convierte un número a cadena binaria (ej. 0b1010).' },
+    { label: 'bin', kind: vscode.CompletionItemKind.Function, detail: 'bin(n)', doc: 'Converts a number to binary string (Medium Module).' },
+
+    // Módulo Bajo: Memoria simulada y punteros
+    { label: 'reservar', kind: vscode.CompletionItemKind.Function, detail: 'reservar(bytes)', doc: 'Reserva memoria en el montón simulado (Módulo Bajo).' },
+    { label: 'allocate', kind: vscode.CompletionItemKind.Function, detail: 'allocate(bytes)', doc: 'Allocates memory in simulated heap (Low Module).' },
+    { label: 'liberar', kind: vscode.CompletionItemKind.Function, detail: 'liberar(direccion)', doc: 'Libera un bloque de memoria previamente reservado (Módulo Bajo).' },
+    { label: 'free', kind: vscode.CompletionItemKind.Function, detail: 'free(address)', doc: 'Frees a previously allocated memory block (Low Module).' },
+    { label: 'guardar_entero', kind: vscode.CompletionItemKind.Function, detail: 'guardar_entero(dir, valor, bytes)', doc: 'Guarda un entero en little-endian en la memoria (Módulo Bajo).' },
+    { label: 'store_int', kind: vscode.CompletionItemKind.Function, detail: 'store_int(addr, value, bytes)', doc: 'Stores a little-endian integer in memory (Low Module).' },
+    { label: 'cargar_entero', kind: vscode.CompletionItemKind.Function, detail: 'cargar_entero(dir, bytes)', doc: 'Carga un entero en little-endian desde la memoria (Módulo Bajo).' },
+    { label: 'load_int', kind: vscode.CompletionItemKind.Function, detail: 'load_int(addr, bytes)', doc: 'Loads a little-endian integer from memory (Low Module).' },
+    { label: 'volcar', kind: vscode.CompletionItemKind.Function, detail: 'volcar(dir, cantidad)', doc: 'Imprime un volcado hexadecimal de memoria (Módulo Bajo).' },
+    { label: 'dump', kind: vscode.CompletionItemKind.Function, detail: 'dump(addr, count)', doc: 'Prints a hexadecimal memory dump (Low Module).' },
+    { label: 'empujar', kind: vscode.CompletionItemKind.Function, detail: 'empujar(byte)', doc: 'Empuja un byte en la pila LIFO (Módulo Bajo).' },
+    { label: 'push', kind: vscode.CompletionItemKind.Function, detail: 'push(byte)', doc: 'Pushes a byte onto the LIFO stack (Low Module).' },
+    { label: 'sacar', kind: vscode.CompletionItemKind.Function, detail: 'sacar()', doc: 'Extrae un byte de la cima de la pila LIFO (Módulo Bajo).' },
+    { label: 'pop', kind: vscode.CompletionItemKind.Function, detail: 'pop()', doc: 'Pops a byte from the top of the LIFO stack (Low Module).' },
+    { label: 'puntero_pila', kind: vscode.CompletionItemKind.Function, detail: 'puntero_pila()', doc: 'Devuelve la dirección del registro de pila SP (Módulo Bajo).' },
+    { label: 'stack_pointer', kind: vscode.CompletionItemKind.Function, detail: 'stack_pointer()', doc: 'Returns the stack pointer register SP (Low Module).' },
+    { label: 'memoria', kind: vscode.CompletionItemKind.Variable, detail: 'memoria[direccion]', doc: 'Arreglo de memoria física simulada para lectura y escritura de bytes (Módulo Bajo).' },
+    { label: 'memory', kind: vscode.CompletionItemKind.Variable, detail: 'memory[address]', doc: 'Simulated physical memory array for byte read/write (Low Module).' }
 ];
 function activate(context) {
     console.log('Extensión Radix Matix activada.');
