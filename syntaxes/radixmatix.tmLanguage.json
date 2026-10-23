@@ -4,11 +4,26 @@
   "patterns": [
     {
       "name": "comment.line.shebang.rm",
-      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low))\\b.*$"
+      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low)|accesible|accessible)\\b.*$"
     },
     {
       "name": "comment.line.double-slash.rm",
       "match": "//.*$"
+    },
+    {
+      "name": "string.interpolated.rm",
+      "begin": "r\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.rm",
+          "match": "\\\\."
+        },
+        {
+          "name": "variable.other.interpolated.rm",
+          "match": "\\{[^}]+\\}"
+        }
+      ]
     },
     {
       "name": "string.quoted.double.rm",
