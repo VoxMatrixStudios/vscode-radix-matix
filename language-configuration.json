@@ -1,8 +1,6 @@
 {
   "comments": {
-    "lineComment": {
-      "start": "//"
-    }
+    "lineComment": "//"
   },
   "brackets": [
     ["[", "]"],
