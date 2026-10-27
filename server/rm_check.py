@@ -4,6 +4,7 @@ import json
 import io
 import contextlib
 import re
+import importlib
 
 # Configuración de rutas para encontrar el núcleo de Radix Matix
 # 1. Si se pasa una ruta explícita por argumento o variable de entorno
@@ -38,7 +39,6 @@ def extraer_mensaje_limpio(err) -> tuple[str, str | None]:
         return str(mensaje).strip(), str(consejo).strip() if consejo else None
 
     texto = str(err)
-    # Si viene con la caja ╔═══════════════════ ... ╚═══════════════════╝
     if "¿Qué pasó?" in texto:
         match_paso = re.search(r"¿Qué pasó\?\s*(.*?)(?=\n\s*Cómo fijar:|\n\s*Ejemplo correcto:|\n╚|\Z)", texto, re.DOTALL)
         match_fijar = re.search(r"Cómo fijar:\s*(.*?)(?=\n\s*Ejemplo correcto:|\n╚|\Z)", texto, re.DOTALL)
@@ -54,12 +54,16 @@ def analizar(codigo: str) -> list:
     diagnosticos = []
 
     # E1: Si no se encuentra el núcleo, desactivar diagnósticos en silencio
+    # Usamos importlib para evitar advertencias falsas de Pylance en el editor
     try:
-        from lexer import Lexer
-        from parser import Parser
-        from errores import ErrorRadix
-    except ImportError:
-        # Modo silencioso: no pintar error rojo en todo el archivo a quien no tenga el compilador instalado
+        mod_lexer = importlib.import_module("lexer")
+        mod_parser = importlib.import_module("parser")
+        mod_errores = importlib.import_module("errores")
+        
+        Lexer = getattr(mod_lexer, "Lexer")
+        Parser = getattr(mod_parser, "Parser")
+        ErrorRadix = getattr(mod_errores, "ErrorRadix")
+    except (ImportError, AttributeError):
         return []
 
     # E2: Redirigir stdout para capturar avisos sin romper la salida JSON
@@ -93,14 +97,13 @@ def analizar(codigo: str) -> list:
             })
             return diagnosticos
 
-    # E2: Procesar avisos capturados de stdout (ej. 'print' en español) y del lexer
+    # E2: Procesar avisos capturados de stdout y del lexer
     salida_avisos = buffer_stdout.getvalue()
     if salida_avisos:
         for linea_aviso in salida_avisos.strip().splitlines():
             linea_aviso = linea_aviso.strip()
             if not linea_aviso:
                 continue
-            # Intentar extraer línea y columna si viene en formato "Aviso [linea:columna]: ..."
             match_pos = re.search(r"Aviso\s*\[(\d+):(\d+)\]:\s*(.*)", linea_aviso)
             if match_pos:
                 lin = int(match_pos.group(1))
@@ -157,11 +160,19 @@ def analizar(codigo: str) -> list:
 
     # 4. Verificación estática de niveles de abstracción
     try:
-        from niveles import CARACTERISTICAS, exigir_nivel
-        from ast_nodes import (
-            DeclaracionTipada, DeclaracionConstante, DefinicionEstructura,
-            Variable, LlamadaFuncion, OperacionBinaria, OperacionUnaria
-        )
+        mod_niveles = importlib.import_module("niveles")
+        mod_ast = importlib.import_module("ast_nodes")
+
+        CARACTERISTICAS = getattr(mod_niveles, "CARACTERISTICAS")
+        exigir_nivel = getattr(mod_niveles, "exigir_nivel")
+
+        DeclaracionTipada = getattr(mod_ast, "DeclaracionTipada")
+        DeclaracionConstante = getattr(mod_ast, "DeclaracionConstante")
+        DefinicionEstructura = getattr(mod_ast, "DefinicionEstructura")
+        Variable = getattr(mod_ast, "Variable")
+        LlamadaFuncion = getattr(mod_ast, "LlamadaFuncion")
+        OperacionBinaria = getattr(mod_ast, "OperacionBinaria")
+        OperacionUnaria = getattr(mod_ast, "OperacionUnaria")
 
         nivel_doc = getattr(lexer, "nivel", None)
         if nivel_doc is not None and ast is not None:
