@@ -14,13 +14,7 @@
     "url": "https://github.com/VoxMatrixStudios/vscode-radix-matix/issues"
   },
   "keywords": [
-    "radixmatix",
-    "radix",
-    "rm",
-    "education",
-    "spanish",
-    "bilingual",
-    "compiler"
+    "radixmatix", "radix", "rm", "education", "spanish", "bilingual", "compiler"
   ],
   "icon": "icons/logo-presentacion.png",
   "engines": {
@@ -41,21 +35,6 @@
     "Snippets"
   ],
   "contributes": {
-    "configuration": {
-      "title": "Radix Matix",
-      "properties": {
-        "radixmatix.corePath": {
-          "type": "string",
-          "default": "",
-          "description": "Ruta absoluta al directorio 'src' del compilador de Radix Matix para diagnósticos pedagógicos avanzados."
-        },
-        "radixmatix.pythonPath": {
-          "type": "string",
-          "default": "python",
-          "description": "Comando o ruta al ejecutable de Python (ej. 'python', 'py' o 'python3')."
-        }
-      }
-    },
     "languages": [
       {
         "id": "radixmatix",
@@ -86,9 +65,29 @@
         "language": "radixmatix",
         "path": "./snippets/radixmatix.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Radix Matix",
+      "properties": {
+        "radixmatix.corePath": {
+          "type": "string",
+          "default": "",
+          "description": "Carpeta src del lenguaje Radix Matix (donde está lexer.py). Vacío = buscar una carpeta hermana."
+        },
+        "radixmatix.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Ejecutable de Python 3.11 o superior (python, python3, py). Vacío = automático."
+        },
+        "radixmatix.diagnosticos": {
+          "type": "boolean",
+          "default": true,
+          "description": "Mostrar errores mientras escribes."
+        }
+      }
+    }
   },
   "devDependencies": {
-    "@types/vscode": "^1.74.0"
+    "@types/vscode": "1.74.0"
   }
 }
