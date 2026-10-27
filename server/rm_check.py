@@ -1,232 +1,164 @@
-import sys
-import os
-import json
-import io
+"""
+rm_check.py — analizador que usa la extensión de VS Code.
+
+Uso: python rm_check.py [--core RUTA]   (el código llega por stdin)
+Imprime SIEMPRE un único objeto JSON:
+  {"motor": true|false, "diagnosticos": [ {linea, columna, mensaje, tipo, gravedad}, ... ]}
+Si el motor del lenguaje no se encuentra, "motor" es false y no hay diagnósticos:
+la extensión sigue funcionando (colores y plantillas) sin mostrar errores falsos.
+"""
 import contextlib
+import io
+import json
+import os
 import re
-import importlib
-
-# Configuración de rutas para encontrar el núcleo de Radix Matix
-# 1. Si se pasa una ruta explícita por argumento o variable de entorno
-# 2. O en una carpeta hermana '../Radix Matix/src' (típico clon de desarrollo)
-rutas_candidatas = []
-if len(sys.argv) > 2 and sys.argv[2]:
-    rutas_candidatas.append(sys.argv[2])
-
-env_core = os.environ.get("RADIXMATIX_CORE_PATH")
-if env_core:
-    rutas_candidatas.append(env_core)
-
-rutas_candidatas.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "Radix Matix", "src"))
-)
-
-for ruta in rutas_candidatas:
-    if ruta and os.path.exists(ruta) and ruta not in sys.path:
-        sys.path.insert(0, ruta)
+import sys
 
 
-def extraer_mensaje_limpio(err) -> tuple[str, str | None]:
-    """
-    Extrae (mensaje, consejo) limpios sin la caja ASCII decorativa.
-    Si err es ErrorRadix o similar, usa sus atributos directos.
-    Si es un str con caja ASCII, extrae "¿Qué pasó?" y "Cómo fijar:".
-    """
-    mensaje = getattr(err, "mensaje", None)
-    consejo = getattr(err, "consejo", None)
-
-    if mensaje:
-        return str(mensaje).strip(), str(consejo).strip() if consejo else None
-
-    texto = str(err)
-    if "¿Qué pasó?" in texto:
-        match_paso = re.search(r"¿Qué pasó\?\s*(.*?)(?=\n\s*Cómo fijar:|\n\s*Ejemplo correcto:|\n╚|\Z)", texto, re.DOTALL)
-        match_fijar = re.search(r"Cómo fijar:\s*(.*?)(?=\n\s*Ejemplo correcto:|\n╚|\Z)", texto, re.DOTALL)
-        
-        msg_limpio = match_paso.group(1).strip() if match_paso else texto.strip()
-        consejo_limpio = match_fijar.group(1).strip() if match_fijar else None
-        return msg_limpio, consejo_limpio
-
-    return texto.strip(), None
+def _buscar_nucleo():
+    """Devuelve la carpeta con lexer.py, o None. Orden: --core, variable de entorno, carpeta hermana."""
+    candidatos = []
+    if "--core" in sys.argv:
+        i = sys.argv.index("--core")
+        if i + 1 < len(sys.argv) and sys.argv[i + 1]:
+            candidatos.append(sys.argv[i + 1])
+    if os.environ.get("RADIXMATIX_CORE"):
+        candidatos.append(os.environ["RADIXMATIX_CORE"])
+    aqui = os.path.dirname(os.path.abspath(__file__))
+    candidatos.append(os.path.join(aqui, "..", "..", "Radix Matix", "src"))
+    for ruta in candidatos:
+        ruta = os.path.abspath(os.path.expanduser(ruta))
+        if os.path.isfile(os.path.join(ruta, "lexer.py")):
+            return ruta
+    return None
 
 
-def analizar(codigo: str) -> list:
+def _diag(linea, columna, mensaje, tipo, gravedad="Error"):
+    return {
+        "linea": int(linea or 1),
+        "columna": int(columna or 1),
+        "mensaje": mensaje,
+        "tipo": tipo,
+        "gravedad": gravedad,
+    }
+
+
+def _texto(err):
+    """Mensaje limpio de un ErrorRadix, sin la caja ASCII."""
+    msg = getattr(err, "mensaje", None) or str(err).strip().splitlines()[-1]
+    consejo = getattr(err, "consejo", "")
+    return f"{msg} ({consejo})" if consejo else msg
+
+
+_AVISO = re.compile(r"Aviso \[(\d+):(\d+)\]:\s*(.*)")
+
+
+def _avisos_de_salida(texto):
+    """Convierte las líneas 'Aviso [l:c]: ...' que imprime el lexer en diagnósticos."""
+    out = []
+    for linea in texto.splitlines():
+        m = _AVISO.search(linea)
+        if m:
+            out.append(_diag(m.group(1), m.group(2), m.group(3), "Aviso de Idioma", "Warning"))
+    return out
+
+
+def analizar(codigo, ruta_nucleo):
+    sys.path.insert(0, ruta_nucleo)
+    from lexer import Lexer  # type: ignore  (el núcleo se carga en tiempo de ejecución)
+    from parser import Parser  # type: ignore  (el núcleo se carga en tiempo de ejecución)
+    from errores import ErrorRadix  # type: ignore  (el núcleo se carga en tiempo de ejecución)
+
     diagnosticos = []
+    capturado = io.StringIO()
 
-    # E1: Si no se encuentra el núcleo, desactivar diagnósticos en silencio
-    # Usamos importlib para evitar advertencias falsas de Pylance en el editor
-    try:
-        mod_lexer = importlib.import_module("lexer")
-        mod_parser = importlib.import_module("parser")
-        mod_errores = importlib.import_module("errores")
-        
-        Lexer = getattr(mod_lexer, "Lexer")
-        Parser = getattr(mod_parser, "Parser")
-        ErrorRadix = getattr(mod_errores, "ErrorRadix")
-    except (ImportError, AttributeError):
-        return []
-
-    # E2: Redirigir stdout para capturar avisos sin romper la salida JSON
-    buffer_stdout = io.StringIO()
-    tokens = None
-    lexer = None
-
-    with contextlib.redirect_stdout(buffer_stdout):
-        # 1. Análisis Léxico
-        lexer = Lexer(codigo)
+    with contextlib.redirect_stdout(capturado):
         try:
+            lexer = Lexer(codigo)
             tokens = lexer.tokenize()
         except ErrorRadix as err:
-            msg, cons = extraer_mensaje_limpio(err)
-            diagnosticos.append({
-                "linea": getattr(err, "linea", 1),
-                "columna": getattr(err, "columna", 1),
-                "mensaje": f"{msg} (Consejo: {cons})" if cons else msg,
-                "tipo": getattr(err, "tipo", "Error Léxico"),
-                "gravedad": "Error",
-            })
-            return diagnosticos
+            return [_diag(err.linea, err.columna, _texto(err), err.tipo)] + _avisos_de_salida(capturado.getvalue())
         except Exception as err:
-            msg, cons = extraer_mensaje_limpio(err)
-            diagnosticos.append({
-                "linea": getattr(lexer, "line", 1),
-                "columna": getattr(lexer, "column", 1),
-                "mensaje": f"{msg} (Consejo: {cons})" if cons else msg,
-                "tipo": "Error Léxico",
-                "gravedad": "Error",
-            })
-            return diagnosticos
+            return [_diag(1, 1, str(err), "Error Léxico")]
 
-    # E2: Procesar avisos capturados de stdout y del lexer
-    salida_avisos = buffer_stdout.getvalue()
-    if salida_avisos:
-        for linea_aviso in salida_avisos.strip().splitlines():
-            linea_aviso = linea_aviso.strip()
-            if not linea_aviso:
-                continue
-            match_pos = re.search(r"Aviso\s*\[(\d+):(\d+)\]:\s*(.*)", linea_aviso)
-            if match_pos:
-                lin = int(match_pos.group(1))
-                col = int(match_pos.group(2))
-                txt = match_pos.group(3)
-            else:
-                lin, col, txt = 1, 1, linea_aviso
-
-            diagnosticos.append({
-                "linea": lin,
-                "columna": col,
-                "mensaje": txt,
-                "tipo": "Aviso de Idioma",
-                "gravedad": "Warning",
-            })
-
-    if hasattr(lexer, "avisos") and isinstance(lexer.avisos, list):
-        for aviso in lexer.avisos:
-            diagnosticos.append({
-                "linea": 1,
-                "columna": 1,
-                "mensaje": aviso,
-                "tipo": "Aviso de Idioma",
-                "gravedad": "Warning",
-            })
-
-    # 3. Análisis Sintáctico (Parser)
-    parser = None
-    ast = None
-    buffer_parser = io.StringIO()
-    with contextlib.redirect_stdout(buffer_parser):
         try:
-            parser = Parser(tokens)
-            ast = parser.parse()
+            ast = Parser(tokens, lineas=codigo.splitlines()).parse()
+        except ErrorRadix as err:
+            diagnosticos.append(_diag(err.linea, err.columna, _texto(err), err.tipo))
+            ast = None
         except Exception as err:
-            linea = 1
-            columna = 1
-            if parser is not None:
-                tok = parser.current_token() if callable(parser.current_token) else parser.current_token
-                if tok:
-                    linea = getattr(tok, "line", 1)
-                    columna = getattr(tok, "column", 1)
+            diagnosticos.append(_diag(1, 1, str(err), "Error de Sintaxis"))
+            ast = None
 
-            # E3: Extraer mensaje limpio sin la caja ASCII
-            msg, cons = extraer_mensaje_limpio(err)
-            diagnosticos.append({
-                "linea": linea,
-                "columna": columna,
-                "mensaje": f"{msg} (Consejo: {cons})" if cons else msg,
-                "tipo": getattr(err, "tipo", "Error de Sintaxis"),
-                "gravedad": "Error",
-            })
-            return diagnosticos
+    diagnosticos.extend(_avisos_de_salida(capturado.getvalue()))
 
-    # 4. Verificación estática de niveles de abstracción
-    try:
-        mod_niveles = importlib.import_module("niveles")
-        mod_ast = importlib.import_module("ast_nodes")
-
-        CARACTERISTICAS = getattr(mod_niveles, "CARACTERISTICAS")
-        exigir_nivel = getattr(mod_niveles, "exigir_nivel")
-
-        DeclaracionTipada = getattr(mod_ast, "DeclaracionTipada")
-        DeclaracionConstante = getattr(mod_ast, "DeclaracionConstante")
-        DefinicionEstructura = getattr(mod_ast, "DefinicionEstructura")
-        Variable = getattr(mod_ast, "Variable")
-        LlamadaFuncion = getattr(mod_ast, "LlamadaFuncion")
-        OperacionBinaria = getattr(mod_ast, "OperacionBinaria")
-        OperacionUnaria = getattr(mod_ast, "OperacionUnaria")
-
-        nivel_doc = getattr(lexer, "nivel", None)
-        if nivel_doc is not None and ast is not None:
-            def verificar_nodo(nodo):
-                if isinstance(nodo, DeclaracionTipada):
-                    caract = nodo.tipo_nombre if nodo.tipo_nombre in CARACTERISTICAS else "constante"
-                    exigir_nivel(nivel_doc, caract, idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, DeclaracionConstante):
-                    exigir_nivel(nivel_doc, "constante", idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, DefinicionEstructura):
-                    exigir_nivel(nivel_doc, "estructura", idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, Variable):
-                    if nodo.nombre in CARACTERISTICAS:
-                        exigir_nivel(nivel_doc, nodo.nombre, idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, LlamadaFuncion):
-                    if nodo.nombre in CARACTERISTICAS:
-                        exigir_nivel(nivel_doc, nodo.nombre, idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, OperacionBinaria):
-                    if nodo.operador in CARACTERISTICAS:
-                        exigir_nivel(nivel_doc, nodo.operador, idioma=getattr(lexer, "language", "es"))
-                elif isinstance(nodo, OperacionUnaria):
-                    if nodo.operador in CARACTERISTICAS:
-                        exigir_nivel(nivel_doc, nodo.operador, idioma=getattr(lexer, "language", "es"))
-
-                for attr, val in getattr(nodo, "__dict__", {}).items():
-                    if isinstance(val, list):
-                        for item in val:
-                            if hasattr(item, "__dict__"):
-                                verificar_nodo(item)
-                    elif hasattr(val, "__dict__"):
-                        verificar_nodo(val)
-
-            verificar_nodo(ast)
-    except ErrorRadix as err:
-        msg, cons = extraer_mensaje_limpio(err)
-        diagnosticos.append({
-            "linea": getattr(err, "linea", 1),
-            "columna": getattr(err, "columna", 1),
-            "mensaje": f"{msg} (Consejo: {cons})" if cons else msg,
-            "tipo": getattr(err, "tipo", "Nivel"),
-            "gravedad": "Error",
-        })
-    except Exception:
-        pass
-
+    if ast is not None:
+        try:
+            diagnosticos.extend(_verificar_niveles(ast, lexer))
+        except Exception:
+            pass
     return diagnosticos
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] != "-" and os.path.exists(sys.argv[1]):
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
-            contenido = f.read()
-    else:
-        contenido = sys.stdin.read()
+def _verificar_niveles(ast, lexer):
+    from errores import ErrorRadix  # type: ignore  (el núcleo se carga en tiempo de ejecución)
+    from niveles import CARACTERISTICAS, exigir_nivel  # type: ignore  (el núcleo se carga en tiempo de ejecución)
+    from ast_nodes import (DeclaracionTipada, DeclaracionConstante,  # type: ignore
+                           DefinicionEstructura, LlamadaFuncion,
+                           OperacionBinaria, OperacionUnaria)
 
-    resultados = analizar(contenido)
-    print(json.dumps(resultados, ensure_ascii=False))
+    nivel = getattr(lexer, "nivel", None)
+    idioma = getattr(lexer, "language", "es")
+    if nivel is None:
+        return []
+    encontrados = []
+
+    def exigir(nombre):
+        try:
+            exigir_nivel(nivel, nombre, idioma=idioma)
+        except ErrorRadix as err:
+            # Línea 0 = el AST aún no guarda posiciones (se arregla en la v2.3).
+            encontrados.append(_diag(err.linea or 1, err.columna or 1, _texto(err), err.tipo))
+
+    def visitar(nodo):
+        if isinstance(nodo, DeclaracionTipada):
+            exigir(nodo.tipo_nombre if nodo.tipo_nombre in CARACTERISTICAS else "constante")
+        elif isinstance(nodo, DeclaracionConstante):
+            exigir("constante")
+        elif isinstance(nodo, DefinicionEstructura):
+            exigir("estructura")
+        elif isinstance(nodo, LlamadaFuncion):
+            if nodo.nombre in CARACTERISTICAS:
+                exigir(nodo.nombre)
+        elif isinstance(nodo, (OperacionBinaria, OperacionUnaria)):
+            if nodo.operador in CARACTERISTICAS:
+                exigir(nodo.operador)
+        # Nota: ya no se revisa `Variable` suelta (daba falsos errores con
+        # nombres como `byte` o `pop`). Es el error B2 del lenguaje.
+        for val in getattr(nodo, "__dict__", {}).values():
+            if isinstance(val, list):
+                for item in val:
+                    if hasattr(item, "__dict__"):
+                        visitar(item)
+            elif hasattr(val, "__dict__"):
+                visitar(val)
+
+    visitar(ast)
+    return encontrados
+
+
+def main():
+    contenido = sys.stdin.read()
+    ruta = _buscar_nucleo()
+    if ruta is None:
+        resultado = {"motor": False, "diagnosticos": []}
+    else:
+        try:
+            resultado = {"motor": True, "diagnosticos": analizar(contenido, ruta)}
+        except Exception as err:  # fallo inesperado: no mostrar nada falso
+            resultado = {"motor": True, "diagnosticos": [], "fallo": f"{type(err).__name__}: {err}"}
+    sys.stdout.write(json.dumps(resultado, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

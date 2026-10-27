@@ -114,7 +114,7 @@
   "Bucle Para": {
     "prefix": "para",
     "body": [
-      "para ${1:elemento} en ${2:coleccion}:",
+      "para ${1:i} en ${2:rango(1, 10)}:",
       "    ${0:hacer_algo}"
     ],
     "description": "Bucle para recorrer una lista o rango"
@@ -122,7 +122,7 @@
   "For Loop": {
     "prefix": "for",
     "body": [
-      "for ${1:element} in ${2:collection}:",
+      "for ${1:i} in ${2:range(1, 10)}:",
       "    ${0:do_something}"
     ],
     "description": "For loop over a list or range"
@@ -154,7 +154,7 @@
   "Timer After": {
     "prefix": "after",
     "body": [
-      "after ${1:1s}:",
+      "after ${1:time}:",
       "    ${0:do_something}"
     ],
     "description": "Delayed single-shot timer"
@@ -220,13 +220,6 @@
       "    ${2:field}: ${3:type}"
     ],
     "description": "Define a typed data structure"
-  },
-  "Cadena Formateada": {
-    "prefix": "fstr",
-    "body": [
-      "r\"${1:texto} {${2:variable}}\""
-    ],
-    "description": "Texto con variables interpoladas"
   },
   "Reservar Memoria": {
     "prefix": "reservar",

@@ -4,7 +4,7 @@
   "patterns": [
     {
       "name": "comment.line.shebang.rm",
-      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low)|version\\s+[0-9.]+|accesible|accessible)\\b.*$"
+      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low)|accesible|accessible)\\b.*$"
     },
     {
       "name": "comment.line.double-slash.rm",
@@ -58,11 +58,11 @@
     },
     {
       "name": "constant.language.math.rm",
-      "match": "\\bpi\\b"
+      "match": "\\b(pi|e)\\b"
     },
     {
       "name": "keyword.control.rm",
-      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|constante|estructura|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|return|const|struct)\\b"
+      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|constante|estructura|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|function|return|const|struct)\\b"
     },
     {
       "name": "storage.type.rm",
@@ -74,7 +74,7 @@
     },
     {
       "name": "support.function.builtin.rm",
-      "match": "\\b(imprimir|print|leer|input|ingresar|enter|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve|promedio|mean|mediana|median|moda|mode|frecuencia|frequency|suma|sum|minimo|min|maximo|max|agregar|append|longitud|length|len|quitar|remove|contiene|contains|copiar|copy|ordenar|sort|rango|range|xor|hexadecimal|hex|binario|bin|binary|reservar|allocate|liberar|free|memoria|memory|guardar_entero|store_int|cargar_entero|load_int|volcar|dump|empujar|push|sacar|pop|puntero_pila|stack_pointer)\\b"
+      "match": "\\b(imprimir|print|leer|input|ingresar|enter|entero|int|decimal|float|texto|str|aleatorio|random|raiz|root|potencia|power|factorial|log|ln|absoluto|abs|seno|sin|coseno|cos|tangente|tan|fraccion|fraction|despejar|solve|promedio|mean|mediana|median|moda|mode|frecuencia|frequency|suma|sum|minimo|min|maximo|max|agregar|append|longitud|length|len|quitar|remove|contiene|contains|copiar|copy|ordenar|sort|rango|range|xor|hexadecimal|hex|binario|bin|binary|reservar|allocate|liberar|free|memoria|memory|guardar_entero|store_int|cargar_entero|load_int|volcar|dump|empujar|push|sacar|pop|puntero_pila|stack_pointer)\\b"
     },
     {
       "name": "keyword.operator.bitwise.rm",
