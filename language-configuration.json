@@ -3,20 +3,27 @@
     "lineComment": "//"
   },
   "brackets": [
-    ["{", "}"],
     ["[", "]"],
     ["(", ")"]
   ],
   "autoClosingPairs": [
-    { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
     { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"" }
+    { "open": "\"", "close": "\"" },
+    { "open": "r\"", "close": "\"" }
   ],
   "surroundingPairs": [
-    { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
     { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"" }
+    { "open": "\"", "close": "\"" },
+    { "open": "r\"", "close": "\"" }
+  ],
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(si|sino|sino\\s+si|mientras|para|cada|despues\\s+de|funcion|estructura|if|else|else\\s+if|while|for|every|after|func|struct)\\b.*:\\s*(//.*)?$",
+      "action": {
+        "indent": "indent"
+      }
+    }
   ]
 }

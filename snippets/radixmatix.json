@@ -92,7 +92,7 @@
   "Function": {
     "prefix": "def",
     "body": [
-      "function ${1:name}(${2:arguments}):",
+      "func ${1:name}(${2:arguments}):",
       "    ${0:do_something}"
     ],
     "description": "Define a function in English"
@@ -114,47 +114,47 @@
   "Bucle Para": {
     "prefix": "para",
     "body": [
-      "para  en :",
-      "    "
+      "para ${1:elemento} en ${2:coleccion}:",
+      "    ${0:hacer_algo}"
     ],
     "description": "Bucle para recorrer una lista o rango"
   },
   "For Loop": {
     "prefix": "for",
     "body": [
-      "for  in :",
-      "    "
+      "for ${1:element} in ${2:collection}:",
+      "    ${0:do_something}"
     ],
     "description": "For loop over a list or range"
   },
   "Temporizador Cada": {
     "prefix": "cada",
     "body": [
-      "cada :",
-      "    "
+      "cada ${1:1s}:",
+      "    ${0:hacer_algo}"
     ],
     "description": "Temporizador repetitivo nativo"
   },
   "Timer Every": {
     "prefix": "every",
     "body": [
-      "every :",
-      "    "
+      "every ${1:1s}:",
+      "    ${0:do_something}"
     ],
     "description": "Native repetitive timer"
   },
   "Temporizador Después": {
     "prefix": "despues",
     "body": [
-      "despues de :",
-      "    "
+      "despues de ${1:1s}:",
+      "    ${0:hacer_algo}"
     ],
     "description": "Temporizador de ejecución postergada"
   },
   "Timer After": {
     "prefix": "after",
     "body": [
-      "after ${1:time}:",
+      "after ${1:1s}:",
       "    ${0:do_something}"
     ],
     "description": "Delayed single-shot timer"
@@ -220,6 +220,13 @@
       "    ${2:field}: ${3:type}"
     ],
     "description": "Define a typed data structure"
+  },
+  "Cadena Formateada": {
+    "prefix": "fstr",
+    "body": [
+      "r\"${1:texto} {${2:variable}}\""
+    ],
+    "description": "Texto con variables interpoladas"
   },
   "Reservar Memoria": {
     "prefix": "reservar",

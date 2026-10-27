@@ -2,24 +2,60 @@
   "name": "radix-matix",
   "displayName": "Radix Matix",
   "description": "Soporte de sintaxis oficial para el lenguaje Radix Matix (.rm)",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "publisher": "VoxMatrixStudios",
-  "icon": "icons/logo-presentacion.png",
-  "engines": {
-    "vscode": "^1.74.0"
-  },
+  "license": "MIT",
+  "homepage": "https://github.com/VoxMatrixStudios/vscode-radix-matix",
   "repository": {
     "type": "git",
     "url": "https://github.com/VoxMatrixStudios/vscode-radix-matix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VoxMatrixStudios/vscode-radix-matix/issues"
+  },
+  "keywords": [
+    "radixmatix",
+    "radix",
+    "rm",
+    "education",
+    "spanish",
+    "bilingual",
+    "compiler"
+  ],
+  "icon": "icons/logo-presentacion.png",
+  "engines": {
+    "vscode": "^1.74.0"
   },
   "main": "./extension.js",
   "activationEvents": [
     "onLanguage:radixmatix"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "El análisis sintáctico en tiempo real se desactiva en espacios de trabajo no confiables."
+    }
+  },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Snippets"
   ],
   "contributes": {
+    "configuration": {
+      "title": "Radix Matix",
+      "properties": {
+        "radixmatix.corePath": {
+          "type": "string",
+          "default": "",
+          "description": "Ruta absoluta al directorio 'src' del compilador de Radix Matix para diagnósticos pedagógicos avanzados."
+        },
+        "radixmatix.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Comando o ruta al ejecutable de Python (ej. 'python', 'py' o 'python3')."
+        }
+      }
+    },
     "languages": [
       {
         "id": "radixmatix",
@@ -52,7 +88,7 @@
       }
     ]
   },
-  "dependencies": {
-    "@types/vscode": "1.74.0"
+  "devDependencies": {
+    "@types/vscode": "^1.74.0"
   }
 }
