@@ -2,7 +2,7 @@
   "name": "radix-matix",
   "displayName": "Radix Matix",
   "description": "Soporte de sintaxis oficial para el lenguaje Radix Matix (.rm)",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "publisher": "VoxMatrixStudios",
   "license": "MIT",
   "homepage": "https://github.com/VoxMatrixStudios/vscode-radix-matix",
