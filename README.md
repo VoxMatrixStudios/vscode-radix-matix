@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT"></a>
-  <img src="https://img.shields.io/badge/Version-2.2.4-cyan.svg" alt="Version 2.2.4">
+  <img src="https://img.shields.io/badge/Version-2.2.5-cyan.svg" alt="Version 2.2.5">
   <img src="https://img.shields.io/badge/Language-Bilingual%20(es%2Fen)-brightgreen.svg" alt="Bilingual">
 </p>
 
@@ -28,7 +28,7 @@
 ### ✨ Features
 
 - 🎨 **Official Syntax Highlighting:** Full TextMate grammar for `.rm` files, covering keywords, math operators, strings, language headers (`#! es` / `#! en`) and module headers (`#! modulo medio` / `#! modulo bajo`).
-- ⚡ **Real-Time Inline Diagnostics (Error Lens style):** Detects syntax and lexical errors as you type, underlines the problem and gives pedagogical advice on how to fix it. Requires the Radix Matix core (see Requirements).
+- ⚡ **Real-Time Inline Diagnostics (Error Lens style):** Detects syntax and lexical errors as you type, underlines the problem and gives pedagogical advice on how to fix it. Requires the Radix Matix core (see Requirements). Only the first syntax error of a file is shown at a time; level errors (e.g. using `<<` in the high module) are all listed.
 - ⌨️ **Bilingual Snippets:** Quick auto-complete snippets for both Spanish and English workflows.
 - 📁 **Language icon:** Radix Matix icon for `.rm` files (some file-icon themes override it).
 - 🔵 **Module-aware highlighting:** Keywords for Medium module (`constante`, `estructura`, `byte`, `xor`) and Low module (`reservar`, `liberar`, `memoria`, `empujar`, `sacar`) are highlighted when their module header is present.
@@ -88,7 +88,7 @@ Search for **Radix Matix** in the Extensions view (`Ctrl+Shift+X`) or install it
 ### ✨ Características
 
 - 🎨 **Resaltado de Sintaxis Oficial:** Gramática TextMate completa para archivos `.rm`, con soporte para palabras clave, operadores matemáticos, cadenas de texto, cabeceras bilingües (`#! es` / `#! en`) y cabeceras de módulo (`#! modulo medio` / `#! modulo bajo`).
-- ⚡ **Diagnósticos en Tiempo Real (Estilo Error Lens):** Detección de errores sintácticos y léxicos mientras escribes, subrayando el problema y mostrando consejos pedagógicos para corregirlos. Requiere el núcleo de Radix Matix (ver Requisitos).
+- ⚡ **Diagnósticos en Tiempo Real (Estilo Error Lens):** Detección de errores sintácticos y léxicos mientras escribes, subrayando el problema y mostrando consejos pedagógicos para corregirlos. Requiere el núcleo de Radix Matix (ver Requisitos). Del archivo solo se muestra el primer error de sintaxis a la vez; los errores de nivel (por ejemplo usar `<<` en el módulo alto) sí salen todos.
 - ⌨️ **Snippets Bilingües:** Plantillas rápidas en español y en inglés.
 - 📁 **Ícono del lenguaje:** ícono de Radix Matix para los archivos `.rm` (algunos temas de íconos lo reemplazan).
 - 🔵 **Resaltado por módulo:** Las palabras clave del módulo medio (`constante`, `estructura`, `byte`, `xor`) y del módulo bajo (`reservar`, `liberar`, `memoria`, `empujar`, `sacar`) se resaltan cuando está presente la cabecera del módulo.

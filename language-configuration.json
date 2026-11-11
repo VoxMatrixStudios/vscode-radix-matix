@@ -14,6 +14,12 @@
     { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
     { "open": "'", "close": "'", "notIn": ["string", "comment"] }
   ],
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(si|sino\\s+si|sino|mientras|para|cada|despues\\s+de|funcion|estructura|if|else\\s+if|else|while|for|every|after|func|struct)\\b.*:\\s*(//.*)?$",
+      "action": { "indent": "indent" }
+    }
+  ],
   "surroundingPairs": [
     { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
