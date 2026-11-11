@@ -95,9 +95,14 @@ function validarDocumento(documento, coleccionDiagnosticos, rutaScript) {
         for (const err of respuesta.diagnosticos || []) {
             const linea = Math.max(0, (err.linea || 1) - 1);
             const columna = Math.max(0, (err.columna || 1) - 1);
-            // E10 (parcial): subrayar la palabra que está en esa posición
-            const rangoPalabra = documento.getWordRangeAtPosition(new vscode.Position(linea, columna));
-            const rango = rangoPalabra || new vscode.Range(linea, columna, linea, columna + 1);
+            // E10: se subraya el token completo (el motor manda su longitud); si no, la palabra
+            let rango;
+            if (err.longitud > 0) {
+                rango = new vscode.Range(linea, columna, linea, columna + err.longitud);
+            } else {
+                const rangoPalabra = documento.getWordRangeAtPosition(new vscode.Position(linea, columna));
+                rango = rangoPalabra || new vscode.Range(linea, columna, linea, columna + 1);
+            }
             const severidad = err.gravedad === 'Warning'
                 ? vscode.DiagnosticSeverity.Warning
                 : vscode.DiagnosticSeverity.Error;

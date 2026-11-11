@@ -2,6 +2,18 @@
 
 Todos los cambios notables de la extensión se documentan en este archivo.
 
+## [2.2.5] - 2026-11-11
+
+### Añadido
+
+- Al pulsar Enter después de una línea que termina en `:` (`si`, `para`, `funcion`...) el editor sangra automáticamente.
+
+### Cambiado
+
+- Los errores se subrayan completos (el token entero), no solo 1 carácter o una palabra.
+- Los errores de nivel (por ejemplo usar `<<` en el módulo alto) se marcan en su línea real y no en la línea 1. Requiere el lenguaje 2.2.6 o superior.
+- La gramática ya no pinta `entero(...)` como tipo cuando se usa como función, ni una variable llamada `e` como constante matemática. Se quitó `function`, que no es palabra clave.
+
 ## [2.2.4] - 2026-11-10
 
 ### Añadido

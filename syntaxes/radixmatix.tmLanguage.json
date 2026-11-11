@@ -84,15 +84,15 @@
     },
     {
       "name": "constant.language.math.rm",
-      "match": "\\b(pi|e)\\b"
+      "match": "\\b(pi|e)\\b(?!\\s*=[^=])"
     },
     {
       "name": "keyword.control.rm",
-      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|constante|estructura|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|function|return|const|struct)\\b"
+      "match": "\\b(si|sino\\s+si|sino|mientras|para|en|romper|continuar|cada|despues\\s+de|detener|funcion|devolver|constante|estructura|if|else\\s+if|else|while|for|in|break|continue|every|after|stop|func|return|const|struct)\\b"
     },
     {
       "name": "storage.type.rm",
-      "match": "\\b(entero|decimal|texto|booleano|byte|int|float|str|bool)\\b"
+      "match": "\\b(entero|decimal|texto|booleano|byte|int|float|str|bool)\\b(?!\\s*\\()"
     },
     {
       "name": "keyword.operator.logical.rm",
