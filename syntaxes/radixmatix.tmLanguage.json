@@ -26,9 +26,35 @@
       ]
     },
     {
+      "name": "string.interpolated.single.rm",
+      "begin": "r'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.rm",
+          "match": "\\\\."
+        },
+        {
+          "name": "variable.other.interpolated.rm",
+          "match": "\\{[^}]+\\}"
+        }
+      ]
+    },
+    {
       "name": "string.quoted.double.rm",
       "begin": "\"",
       "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.rm",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single.rm",
+      "begin": "'",
+      "end": "'",
       "patterns": [
         {
           "name": "constant.character.escape.rm",
