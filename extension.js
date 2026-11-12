@@ -193,8 +193,14 @@ function activate(context) {
         'radixmatix',
         {
             provideCompletionItems(documento) {
-                // Leer las primeras 4 líneas para detectar la cabecera del módulo
-                const cabecera = documento.getText(new vscode.Range(0, 0, 4, 0));
+                // v3: la cabecera tiene varias líneas `#!` en cualquier orden; se leen hasta la primera línea de código
+                const lineasCabecera = [];
+                for (let i = 0; i < Math.min(documento.lineCount, 12); i++) {
+                    const t = documento.lineAt(i).text.trim();
+                    if (i > 0 && t !== '' && !t.startsWith('//') && !t.startsWith('#!')) break;
+                    lineasCabecera.push(t);
+                }
+                const cabecera = lineasCabecera.join('\n');
                 const esMedio = cabecera.includes('modulo medio') || cabecera.includes('module medium');
                 const esBajo  = cabecera.includes('modulo bajo')  || cabecera.includes('module low');
 

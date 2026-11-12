@@ -159,6 +159,14 @@
     ],
     "description": "Delayed single-shot timer"
   },
+  "Cabecera Versión": {
+    "prefix": "version",
+    "body": [
+      "#! version ${1:3.0}",
+      "$0"
+    ],
+    "description": "Edición del lenguaje para la que se escribió el archivo (Radix Matix v3)"
+  },
   "Cabecera Módulo Medio": {
     "prefix": "modmedio",
     "body": [
