@@ -2,6 +2,16 @@
 
 Todos los cambios notables de la extensión se documentan en este archivo.
 
+## [2.2.6] - 2026-11-12
+
+### Añadido
+
+- **Cabecera de la v3:** la línea `#! version 3.0` se colorea como el resto de la cabecera, y hay un fragmento nuevo (`version`) para escribirla.
+
+### Cambiado
+
+- El autocompletado por módulo (`#! modulo medio|bajo`) lee ahora toda la cabecera hasta la primera línea de código, no solo las primeras 4 líneas, porque en la v3 las líneas `#!` pueden ir en cualquier orden.
+
 ## [2.2.5] - 2026-11-11
 
 ### Añadido

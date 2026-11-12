@@ -4,7 +4,7 @@
   "patterns": [
     {
       "name": "comment.line.shebang.rm",
-      "match": "^#!\\s*(es|en|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low)|accesible|accessible)\\b.*$"
+      "match": "^#!\\s*(es|en|version\\s+\\d+\\.\\d+|modulo\\s+(alto|medio|bajo)|module\\s+(high|medium|low)|accesible|accessible)\\b.*$"
     },
     {
       "name": "comment.line.double-slash.rm",
